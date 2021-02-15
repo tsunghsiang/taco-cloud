@@ -12,7 +12,15 @@ public class Ingredient {
 
 	public static enum Type { WRAP, PROTEIN, VEGGIES, CHEESE, SAUCE };
 	
-	private String mId;
-	private String mName;
-	private Type mType;
+	public String mId;
+	public String mName;
+	public Type mType;
+	
+	public Ingredient(String id, String name, Type type) {
+		this.mId = id;
+		this.mName = name;
+		this.mType = type;
+	}
+	
+	public Type GetType() { return this.mType; }
 }

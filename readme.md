@@ -1,6 +1,6 @@
 # Spring in Action Note
 
-# Ch 1. Getting Started with Spring
+# Part 1. Getting Started with Spring
 
 ## Definition of Spring
 > The Spring itself is actually a container of an application context that creates or manages beans applied by an application. 
@@ -16,7 +16,31 @@
  -- built-in H2 console if it is in use
  - [Lombok](https://projectlombok.org/) : automatically inject missing members for domain class, which makes codes slim and trim. 
  
-# Ch 2. Developing Web Applications
+# Part 2. Developing Web Applications
 
 ## Definition of a domain
 > The application domain is the subject area it addresses. For example, data structures, view designs, objects, etc.
+
+## A Controller's job
+> To handle HTTP requests, either hand a request off to a view for rendering HTML (browser-displayed) or write data directly to response body (RESTful).
+
+## HTTP annotations
+| Annotation | Description | Comment |
+| :------------ |:-------------|:-----|
+| @RequestMapping | General Purpose of Request Handling | Applied at a <b>class level</b> to specify the base path |
+| @GetMapping | Handle HTTP GET Request | Applied on handler methods |
+| @PostMapping | Handle HTTP POST Request | Applied on handler methods |
+| @PutMapping | Handle HTTP PUT Request | Applied on handler methods |
+| @DeleteMapping | Handle HTTP DELETE Request | Applied on handler methods |
+| @PatchMapping | Handle HTTP PATCH Request | Applied on handler methods ||
+
+## View Designing Tools
+- [JavaServer Pages, JSP](https://www.oracle.com/java/technologies/jspt.html)
+- [Thymeleaf](https://www.thymeleaf.org/)
+- [FreeMarker](https://freemarker.apache.org/)
+- [Mustache](https://mustache.github.io/)
+- [Groovy](https://docs.groovy-lang.org/docs/next/html/documentation/template-engines.html#_introduction)
+
+## View Presentation Principles
+1. <b>View libraries are designed to be decoupled from any web frameworks</b>. So they are unware of Spring's model abstraction and unable to work with data that controller places in <b>Model</b>.
+2. <b>View libraries can work with servlet request attributes</b>. Therefore before Spring hands requests over to views for rendering HTML, it copies them into servlet request attributes that other view template options are ready access to.
