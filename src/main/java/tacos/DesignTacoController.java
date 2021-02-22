@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ import tacos.Ingredient.Type;
 public class DesignTacoController {
 	
 	@GetMapping
-	public String ShowDesignForm(Model model) {
+	public String showDesignForm(Model model) {
 		// Prepare a list of ingredients
 		List<Ingredient> ingredients = Arrays.asList(
 			new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
@@ -43,7 +44,7 @@ public class DesignTacoController {
 		Type [] types = Ingredient.Type.values();
 		for(Type type : types) {
 			model.addAttribute(	type.toString().toLowerCase(), 
-								FilterByType(ingredients, type)	);
+								filterByType(ingredients, type)	);
 		}
 		model.addAttribute("design", new Taco());
 		
@@ -52,14 +53,25 @@ public class DesignTacoController {
 	}
 	
 	/**
+	 * @param design (argument name is identical to th:object)
+	 * Process taco submitted by user
+	 */
+	@PostMapping
+	public String processDesign(Taco design) {
+		System.out.println(design);
+		return "design";
+		// return "redirect:order/current"
+	}
+	
+	/**
 	 * @param ingredients
 	 * @param type
 	 * @return An array of same type
 	 * The function filters ingredients by a specific type 
 	 */
-	private List<Ingredient> FilterByType(List<Ingredient> ingredients, Type type){
+	private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type){
 		return ingredients.stream()
-						  .filter(elem -> elem.GetType().equals(type))
+						  .filter(elem -> elem.getType().equals(type))
 						  .collect(Collectors.toList());
 	}
 }

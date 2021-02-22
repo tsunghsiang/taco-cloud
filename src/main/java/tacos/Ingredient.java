@@ -15,6 +15,7 @@ public class Ingredient {
 	public String mId;
 	public String mName;
 	public Type mType;
+
 	
 	public Ingredient(String id, String name, Type type) {
 		this.mId = id;
@@ -22,5 +23,5 @@ public class Ingredient {
 		this.mType = type;
 	}
 	
-	public Type GetType() { return this.mType; }
+	public Type getType() { return this.mType; }
 }

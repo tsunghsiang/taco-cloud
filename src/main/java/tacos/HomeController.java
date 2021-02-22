@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
 	
 	@GetMapping
-	public String Home() {
+	public String home() {
 		// Return a logical name of a view
 		return "home";
 	}
