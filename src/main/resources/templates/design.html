@@ -8,7 +8,8 @@
 		<h1>Design Your Taco!</h1>
 		<img th:src="@{/images/TacoCloud.png}"/>
 		
-		<form method="POST" th:object="${design}">
+		<form method="POST"  th:object="${taco}">
+
 			<div class="grid">
 				<div class="ingredient-group" id="wraps">
 					<h3>Design Your Wrap:</h3>
@@ -46,12 +47,12 @@
 					<h3>Select Your Sauces:</h3>
 					<div th:each="ingredient : ${sauce}" >
 					<input name="ingredients" type="checkbox" th:value="${ingredient.mId}"/>
-		 			<span th:text="${ingredient.mName}">INGREDIENT</span><br/>
+		 			<span th:text="${ingredient.mName}" >INGREDIENT</span><br/>
 					</div>
 				</div>
 			</div>
-			  
-			<div>
+		
+			<div>	
 			<h3>Name Your Taco Creation:</h3>
 			<!-- th:field should be the same as its getter method.
 				 For example, the getter method is as below:
@@ -60,6 +61,7 @@
 				 
 				 Therefore th:field = "*{RoadName}"			 
 			 -->
+			 
 			<input type="text" th:field="*{name}"/>
 			<br/>
 			<button>Submit Your Taco</button>

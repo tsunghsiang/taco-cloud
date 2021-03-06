@@ -4,11 +4,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 import tacos.Ingredient.Type;
@@ -21,11 +30,19 @@ import tacos.Ingredient.Type;
 @Controller
 /* When annotation '@RequestMapping' is applied at the class-level,
  * it indicates what kinds of requests a controller would handle */
-@RequestMapping("/design")						
+@RequestMapping("/design")
 public class DesignTacoController {
 	
 	@GetMapping
 	public String showDesignForm(Model model) {
+		addIngredientsToModel(model);
+		model.addAttribute("taco", new Taco());
+		
+		// return a logical name of a view
+		return "design";
+	}
+	
+	public void addIngredientsToModel(Model model) {
 		// Prepare a list of ingredients
 		List<Ingredient> ingredients = Arrays.asList(
 			new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
@@ -46,20 +63,19 @@ public class DesignTacoController {
 			model.addAttribute(	type.toString().toLowerCase(), 
 								filterByType(ingredients, type)	);
 		}
-		model.addAttribute("design", new Taco());
-		
-		// return a logical name of a view
-		return "design";
-	}
+	}	
 	
 	/**
 	 * @param design (argument name is identical to th:object)
 	 * Process taco submitted by user
 	 */
 	@PostMapping
-	public String processDesign(Taco design) {
-		System.out.println(design);
-		return "design";
+	  public String processDesign(@Valid @ModelAttribute("taco") Taco taco, Errors errors, Model model) {
+	    if (errors.hasErrors()) {
+	      return "design";
+	    }
+		System.out.println(taco);
+		return "home";
 		// return "redirect:order/current"
 	}
 	
