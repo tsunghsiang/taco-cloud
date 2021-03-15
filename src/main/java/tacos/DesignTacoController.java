@@ -75,8 +75,12 @@ public class DesignTacoController {
 	      return "design";
 	    }
 		System.out.println(taco);
-		return "home";
-		// return "redirect:order/current"
+		/*
+		 * redirect: direct current form to next view
+		 * orders/current: Direct to a controller that receives 'orders' mapping
+		 * with GET mapping request 'current'
+		 * */
+		return "redirect:/orders/current";
 	}
 	
 	/**
