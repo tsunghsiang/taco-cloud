@@ -34,12 +34,14 @@
 | @DeleteMapping | Handle HTTP DELETE Request | Applied on handler methods |
 | @PatchMapping | Handle HTTP PATCH Request | Applied on handler methods ||
 
-## View Designing Tools
-- [JavaServer Pages, JSP](https://www.oracle.com/java/technologies/jspt.html)
-- [Thymeleaf](https://www.thymeleaf.org/)
-- [FreeMarker](https://freemarker.apache.org/)
-- [Mustache](https://mustache.github.io/)
-- [Groovy](https://docs.groovy-lang.org/docs/next/html/documentation/template-engines.html#_introduction)
+## View Template Libraries
+| Template | Dependency | Cache Templates | Remark |
+| :------------ |:----------|:-----|:--------|
+| [Thymeleaf](https://www.thymeleaf.org/)|spring-boot-starter-thymeleaf|spring.thymeleaf.cache||
+|[FreeMarker](https://freemarker.apache.org/)|spring-boot-starter-freemarker|spring.freemarker.cache||
+|[Mustache](https://mustache.github.io/)|spring-boot-starter-mustache|spring.mustache.cache||
+|[Groovy](https://docs.groovy-lang.org/docs/next/html/documentation/template-engines.html#_introduction)|spring-boot-starter-groovy-templates|spring.groovy.template.cache||
+|[JavaServer Pages, JSP](https://www.oracle.com/java/technologies/jspt.html)|N/A|N/A||
 
 ## View Presentation Principles
 1. <b>View libraries are designed to be decoupled from any web frameworks</b>. So they are unware of Spring's model abstraction and unable to work with data that controller places in <b>Model</b>.
@@ -64,3 +66,5 @@ public class TacoCloudApplication implements WebMvcConfigurer{
 As code snippet above, the class `TacoCloudApplication` implements interface `WebMvcConfigurer`, overriding the method `addViewControllers` to **create a direct mapping between an URL ("/") and a view ("home")**. 
 
 **As a result, a developer could remove corresponding controller classes from sources**.
+
+# Part 3. Working with Data
