@@ -23,5 +23,9 @@ public class Ingredient {
 		this.mType = type;
 	}
 	
+	public String getId() { return mId; }
+	
+	public String getName() { return mName; }
+	
 	public Type getType() { return this.mType; }
 }
