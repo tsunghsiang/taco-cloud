@@ -7,13 +7,13 @@ import org.springframework.stereotype.Repository;
 import tacos.Ingredient;
 
 @Repository
-public class DataRepository implements IngredientRepository {
+public class JdbcIngredientRepository implements IngredientRepository {
 
 	private JdbcTemplate db = null;
-	private DataRowMapper drm = new DataRowMapper();;
+	private JdbcIngredientRowMapper drm = new JdbcIngredientRowMapper();;
 	
 	@Autowired
-	public DataRepository(JdbcTemplate db) { 
+	public JdbcIngredientRepository(JdbcTemplate db) { 
 		this.db = db;
 	}
 	

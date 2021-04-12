@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import tacos.Ingredient;
 
-public class DataRowMapper implements RowMapper<Ingredient> {
+public class JdbcIngredientRowMapper implements RowMapper<Ingredient> {
 
 	@Override
 	public Ingredient mapRow(ResultSet rs, int rowNum) throws SQLException {

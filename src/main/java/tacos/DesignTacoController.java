@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.extern.slf4j.Slf4j;
 import tacos.Ingredient.Type;
-import tacos.data.DataRepository;
+import tacos.data.JdbcIngredientRepository;
 import tacos.data.IngredientRepository;
 
 /* Simple Logging Facade for Java */
