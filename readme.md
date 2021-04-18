@@ -68,3 +68,16 @@ As code snippet above, the class `TacoCloudApplication` implements interface `We
 **As a result, a developer could remove corresponding controller classes from sources**.
 
 # Part 3. Working with Data
+
+## H2 Database
+In order to set up a simple database for unit testing or POC, we'd like it to be created when a server turns on as well as to be destroyed when a server turns off. [H2 Databse](https://howtodoinjava.com/spring-boot2/h2-database-example/) is an embedded, in-memory database that could be applied for functional validation in the original development life cycle.
+
+To apply it in a SpringBoot application, we should add the maven dependency in a pom.xml file as below
+```
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+As pom.xml file described, the scope of the bean is used at runtime. That is to say, the database starts when an application runs; release itself when an application terminates. To learn more regarding it, please refer to [H2 Engine](https://www.h2database.com/html/main.html).
