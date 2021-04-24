@@ -20,7 +20,7 @@ public class Taco {
 	@Size(min=5, message="Name must be at least 5 characters long")
 	private String name;
 	@Size(min=1, message="You must choose at least 1 ingredient")
-	private List<String> ingredients;
+	private List<Ingredient> ingredients;
 	  
 	/**
 	 * @return
@@ -41,7 +41,7 @@ public class Taco {
 	 * @return
 	 * Get list of ingredients
 	 */
-	public List<String> getIngredients(){ return this.ingredients; }
+	public List<Ingredient> getIngredients(){ return this.ingredients; }
 	/**
 	 * Display contents of Taco design
 	 */
@@ -57,5 +57,13 @@ public class Taco {
 			//}
 		}
 		return sb.toString();
+	}
+
+	public void setCreatedAt(Date date) {
+		this.createdAt = date;
+	}
+
+	public void setId(Long id) { 
+		this.id = id;
 	}
 }

@@ -1,7 +1,6 @@
 package tacos;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,11 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 import tacos.Ingredient.Type;
-import tacos.data.JdbcIngredientRepository;
 import tacos.data.IngredientRepository;
+import tacos.data.TacoRepository;
 
 /* Simple Logging Facade for Java */
 @Slf4j
@@ -30,19 +30,44 @@ import tacos.data.IngredientRepository;
 /* When annotation '@RequestMapping' is applied at the class-level,
  * it indicates what kinds of requests a controller would handle */
 @RequestMapping("/design")
+@SessionAttributes("order")
 public class DesignTacoController {
 	
-	private IngredientRepository repo;
+	private IngredientRepository ingredientRepo;
+	private TacoRepository tacoRepo;
 	
+	/*
+	 * In general, Spring-MVC will always make a call first to that method, 
+	 * before it calls any request handler methods. 
+	 * 
+	 * That is, @ModelAttribute methods are invoked before the controller methods
+	 * annotated with @RequestMapping are invoked. 
+	 * 
+	 * The logic behind the sequence is that, the model object has to be created 
+	 * before any processing starts inside the controller methods.
+	 * 
+	 * Reference: https://www.baeldung.com/spring-mvc-and-the-modelattribute-annotation
+	 * */
+	@ModelAttribute(name = "order")
+	 public Order order() {
+		return new Order();
+	 }
+	
+	 @ModelAttribute(name = "taco")
+	 public Taco taco() {
+		 return new Taco();
+	 }
+	 
 	@Autowired
-	public DesignTacoController(IngredientRepository repo) {
-		this.repo = repo;
+	public DesignTacoController(IngredientRepository ingredientRepo, 
+								TacoRepository tacoRepo) {
+		this.ingredientRepo = ingredientRepo;
+		this.tacoRepo = tacoRepo;
 	}
 	
 	@GetMapping
 	public String showDesignForm(Model model) {
 		addIngredientsToModel(model);
-		model.addAttribute("taco", new Taco());
 		
 		// return a logical name of a view
 		return "design";
@@ -51,7 +76,7 @@ public class DesignTacoController {
 	public void addIngredientsToModel(Model model) {
 		// Prepare a list of ingredients
 		List<Ingredient> ingredients = new ArrayList<>();
-		this.repo.findAll().forEach(elem->ingredients.add(elem));
+		this.ingredientRepo.findAll().forEach(elem->ingredients.add(elem));
 		/*
 		List<Ingredient> ingredients = Arrays.asList(
 			new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
@@ -80,11 +105,19 @@ public class DesignTacoController {
 	 * Process taco submitted by user
 	 */
 	@PostMapping
-	  public String processDesign(@Valid @ModelAttribute("taco") Taco taco, Errors errors, Model model) {
+	public String processDesign(@Valid Taco taco, Errors errors, @ModelAttribute Order order) {
 	    if (errors.hasErrors()) {
 	      return "design";
 	    }
 		System.out.println(taco);
+		
+		// Save taco information to database
+		// Save taco to order model attributes for accessing tacoId
+		if(taco.getIngredients() != null) {
+			Taco saved = this.tacoRepo.save(taco);
+			order.setTacos(saved);
+		}
+		
 		/*
 		 * redirect: direct current form to next view
 		 * orders/current: Direct to a controller that receives 'orders' mapping
