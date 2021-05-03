@@ -1,6 +1,6 @@
-package tacos.data;
+package tacos.repository;
 
-import tacos.Ingredient;
+import tacos.data.Ingredient;
 
 public interface IngredientRepository {
 	/**

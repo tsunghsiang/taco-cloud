@@ -1,11 +1,11 @@
-package tacos.data;
+package tacos.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import tacos.Ingredient;
+import tacos.data.Ingredient;
 
 public class JdbcIngredientRowMapper implements RowMapper<Ingredient> {
 

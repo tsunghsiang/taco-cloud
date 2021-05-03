@@ -1,10 +1,10 @@
-package tacos.data;
+package tacos.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import tacos.Ingredient;
+import tacos.data.Ingredient;
 
 @Repository
 public class JdbcIngredientRepository implements IngredientRepository {

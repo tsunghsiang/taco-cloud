@@ -1,4 +1,4 @@
-package tacos;
+package tacos.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import lombok.extern.slf4j.Slf4j;
-import tacos.Ingredient.Type;
-import tacos.data.IngredientRepository;
-import tacos.data.TacoRepository;
+import tacos.data.Ingredient;
+import tacos.data.Order;
+import tacos.data.Taco;
+import tacos.data.Ingredient.Type;
+import tacos.repository.IngredientRepository;
+import tacos.repository.TacoRepository;
 
 /* Simple Logging Facade for Java */
 @Slf4j

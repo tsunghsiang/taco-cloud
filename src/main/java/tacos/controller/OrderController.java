@@ -1,4 +1,4 @@
-package tacos;
+package tacos.controller;
 
 import javax.validation.Valid;
 
@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import tacos.data.OrderRepository;
+import tacos.data.Order;
+import tacos.repository.OrderRepository;
 
 /**
  * Any request-handling methods in this controller will handle requests 
