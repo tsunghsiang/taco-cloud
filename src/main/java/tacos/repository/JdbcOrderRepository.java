@@ -24,10 +24,10 @@ public class JdbcOrderRepository implements OrderRepository {
 	
 	@Autowired
 	public JdbcOrderRepository(JdbcTemplate db) { this.db = db; }
-	
+
 	@Override
 	public Order save(Order order) {
-		order.setCreatedAt(new Date());
+		order.setPlacedAt(new Date());
 		PreparedStatementCreatorFactory pscf = new PreparedStatementCreatorFactory("INSERT INTO Taco_Order(deliveryName, deliveryStreet, deliveryCity, deliveryState, deliveryZip, ccNumber, ccExpiration, ccCVV, placedAt) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 																				  Types.VARCHAR, 
 																				  Types.VARCHAR,
@@ -46,7 +46,7 @@ public class JdbcOrderRepository implements OrderRepository {
 																					 order.getCcNumber(),
 																					 order.getCcExpiration(),
 																					 order.getCcCVV(),
-																					 new Timestamp(order.getCreatedAt().getTime())));
+																					 new Timestamp(order.getPlacedAt().getTime())));
 		KeyHolder holder = new GeneratedKeyHolder();
 		this.db.update(psc, holder);
 		
@@ -57,6 +57,5 @@ public class JdbcOrderRepository implements OrderRepository {
 		}
 		
 		return order;
-	}
-
+	}		
 }

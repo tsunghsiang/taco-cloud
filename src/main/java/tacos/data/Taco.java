@@ -11,7 +11,6 @@ import lombok.Data;
 
 @Data
 public class Taco {
-	
 	@NonNull
 	private Long id;
 	@NonNull
@@ -63,7 +62,6 @@ public class Taco {
 		this.createdAt = date;
 	}
 
-	public void setId(Long id) { 
-		this.id = id;
-	}
+	public void setId(Long id) { this.id = id; }
+
 }

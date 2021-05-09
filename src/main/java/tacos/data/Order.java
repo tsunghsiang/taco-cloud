@@ -37,7 +37,7 @@ public class Order {
 	private List<Taco> tacos = new ArrayList<Taco>();
 	
 	public Long getId() { return id; }
-	public Date getCreatedAt() { return placedAt; }
+	public Date getPlacedAt() { return placedAt; }
 	public String getName() { return name; }
 	public String getStreet() {return street;}
 	public String getCity() { return city; }
@@ -49,7 +49,7 @@ public class Order {
 	public List<Taco> getTacos() { return tacos; }
 	
 	public void setId(Long id) { this.id = id; }
-	public void setCreatedAt(Date date) { this.placedAt = date; }
+	public void setPlacedAt(Date date) { this.placedAt = date; }
 	public void setName(String name) { this.name = name; }
 	public void setStreet(String street) { this.street = street; }
 	public void setCity(String city) { this.city = city; }
@@ -58,7 +58,7 @@ public class Order {
 	public void setCcNumber(String ccNumber) { this.ccNumber = ccNumber;}
 	public void setCcExpiration(String ccExpiration) { this.ccExpiration = ccExpiration; }
 	public void setCcCVV(String ccCVV) { this.ccCVV = ccCVV; }	
-	public void setTacos(Taco taco) { this.tacos.add(taco); } 
+	public void setTacos(Taco taco) { this.tacos.add(taco); }
 	
 	public String toString() {
 		String result = String.format(	"[Order] Name: %s\n"

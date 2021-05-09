@@ -25,15 +25,6 @@ public class JdbcTacoRepository implements TacoRepository {
 	@Autowired
 	public JdbcTacoRepository(JdbcTemplate db) { this.db = db;}
 	
-	@Override
-	public Taco save(Taco taco) {
-		// Insert taco
-		long tacoId = saveTacoInfo(taco);
-		taco.setId(tacoId);
-		saveTacoIngredientsInfo(tacoId, taco.getIngredients());
-		return taco;
-	}
-
 	/**
 	 * @param taco
 	 * @return
@@ -60,5 +51,15 @@ public class JdbcTacoRepository implements TacoRepository {
 	private void saveTacoIngredientsInfo(long id, List<Ingredient> group) {
 		for(Ingredient elem : group)
 			this.db.update("INSERT INTO Taco_Ingredients(taco, ingredient) VALUES(?, ?)", id, elem.getId());	
+	}
+
+	
+	@Override
+	public Taco save(Taco taco) {
+		// Insert taco
+		long tacoId = saveTacoInfo(taco);
+		taco.setId(tacoId);
+		saveTacoIngredientsInfo(tacoId, taco.getIngredients());
+		return taco;
 	}
 }

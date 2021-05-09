@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 import tacos.data.Ingredient;
+import tacos.data.Ingredient.Type;
 import tacos.data.Order;
 import tacos.data.Taco;
-import tacos.data.Ingredient.Type;
 import tacos.repository.IngredientRepository;
 import tacos.repository.TacoRepository;
 
@@ -81,7 +81,7 @@ public class DesignTacoController {
 		List<Ingredient> ingredients = new ArrayList<>();
 		this.ingredientRepo.findAll().forEach(elem->ingredients.add(elem));
 		/*
-		List<Ingredient> ingredients = Arrays.asList(
+		List<Ingredient>  = Arrays.asList(
 			new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
 			new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
 			new Ingredient("GRBP", "Ground Beef", Type.PROTEIN),

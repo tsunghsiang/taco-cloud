@@ -37,5 +37,4 @@ public class JdbcIngredientRepository implements IngredientRepository {
 						ingredient.getType().toString()	);
 		return ingredient;
 	}
-
 }
