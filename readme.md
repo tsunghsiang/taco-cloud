@@ -81,3 +81,14 @@ To apply it in a SpringBoot application, we should add the maven dependency in a
 </dependency>
 ```
 As pom.xml file described, the scope of the bean is used at runtime. That is to say, the database starts when an application runs; release itself when an application terminates. To learn more regarding it, please refer to [H2 Engine](https://www.h2database.com/html/main.html).
+
+## Spring JDBC
+To interact with database, Spring provides a framework, Spring JDBC, for developers to simplify redundant data access operations. In this section, the auditor introduced the uses of both [JdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) and [SimpleJdbcInsert](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/simple/SimpleJdbcInsert.html) for inserting data into specific tables.
+
+To sum up, [Spring JDBC modules](https://www.baeldung.com/spring-jdbc-jdbctemplate) are to be separated into 4 packages:
+* Core: The core of JDBC container which contains basic components for data access, inclusive of JdbcTemplate and SimpleJdbcInsert.
+* Datasource: The utility class that provides capability for developers to access data sources (ie: database)
+* Object: Data access is realized in an object-oriented manner. The package allows developers to query columns or properties; return results as domain/businese objects.
+* Support: It provides additional functionality under core and object packages.
+
+Learn more from [Spring Framework Documentation](https://docs.spring.io/spring-framework/docs/current/reference/html/index.html).

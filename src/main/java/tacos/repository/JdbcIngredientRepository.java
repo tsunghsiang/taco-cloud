@@ -10,7 +10,7 @@ import tacos.data.Ingredient;
 public class JdbcIngredientRepository implements IngredientRepository {
 
 	private JdbcTemplate db = null;
-	private JdbcIngredientRowMapper drm = new JdbcIngredientRowMapper();;
+	private JdbcIngredientRowMapper drm = new JdbcIngredientRowMapper();
 	
 	@Autowired
 	public JdbcIngredientRepository(JdbcTemplate db) { 
