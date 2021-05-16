@@ -1,6 +1,7 @@
 package tacos.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,10 +20,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import lombok.extern.slf4j.Slf4j;
 import tacos.data.Ingredient;
 import tacos.data.Ingredient.Type;
+import tacos.repository.jdbc.IngredientRepository;
+import tacos.repository.jdbc.TacoRepository;
+import tacos.repository.jpa.IngredientJpaRepository;
+import tacos.repository.jpa.TacoJpaRepository;
 import tacos.data.Order;
 import tacos.data.Taco;
-import tacos.repository.IngredientRepository;
-import tacos.repository.TacoRepository;
 
 /* Simple Logging Facade for Java */
 @Slf4j
@@ -36,8 +39,8 @@ import tacos.repository.TacoRepository;
 @SessionAttributes("order")
 public class DesignTacoController {
 	
-	private IngredientRepository ingredientRepo;
-	private TacoRepository tacoRepo;
+	private IngredientJpaRepository ingredientRepo;
+	private TacoJpaRepository tacoRepo;
 	
 	/*
 	 * In general, Spring-MVC will always make a call first to that method, 
@@ -62,8 +65,8 @@ public class DesignTacoController {
 	 }
 	 
 	@Autowired
-	public DesignTacoController(IngredientRepository ingredientRepo, 
-								TacoRepository tacoRepo) {
+	public DesignTacoController(IngredientJpaRepository ingredientRepo, 
+								TacoJpaRepository tacoRepo) {
 		this.ingredientRepo = ingredientRepo;
 		this.tacoRepo = tacoRepo;
 	}
@@ -71,7 +74,6 @@ public class DesignTacoController {
 	@GetMapping
 	public String showDesignForm(Model model) {
 		addIngredientsToModel(model);
-		
 		// return a logical name of a view
 		return "design";
 	}
@@ -80,8 +82,9 @@ public class DesignTacoController {
 		// Prepare a list of ingredients
 		List<Ingredient> ingredients = new ArrayList<>();
 		this.ingredientRepo.findAll().forEach(elem->ingredients.add(elem));
+		
 		/*
-		List<Ingredient>  = Arrays.asList(
+		List<Ingredient> ingredients = Arrays.asList(
 			new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
 			new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
 			new Ingredient("GRBP", "Ground Beef", Type.PROTEIN),

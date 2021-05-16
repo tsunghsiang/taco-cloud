@@ -1,4 +1,4 @@
-package tacos.repository;
+package tacos.repository.jdbc;
 
 import java.sql.Timestamp;
 import java.sql.Types;
