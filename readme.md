@@ -108,3 +108,16 @@ There are 3 points needs being emphasized with JPA customization:
 * Spring data ignores most subject words as that is the type that **CrudRepository** is parameterized.
 * The predicate follows by word **By** in the method name with query conditions.
 .
+
+## Part 4. Securing Spring
+
+To provide basic secure configuration for SpringBoot applications, the only thing a developer needs to do is to include the maven dependency as below in the pom.xml file.
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+When the application starts, autoconfiguration will detect that Spring Securoty is in the classpath and will set up some basic security configuration. That is to say, when you fire up an applications, a login page would appear, requiring basic authentication like username & password as depicted below. Usually, the username is **user** by default while password is randomly generated as the console shows.
+![LoginPage](https://github.com/tsunghsiang/taco-cloud/tree/master/src/main/resources/static/images/loginpage.png)
+![PWD](https://github.com/tsunghsiang/taco-cloud/tree/master/src/main/resources/static/images/pwd.png)
