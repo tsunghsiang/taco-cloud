@@ -119,5 +119,5 @@ To provide basic secure configuration for SpringBoot applications, the only thin
 </dependency>
 ```
 When the application starts, autoconfiguration will detect that Spring Securoty is in the classpath and will set up some basic security configuration. That is to say, when you fire up an applications, a login page would appear, requiring basic authentication like username & password as depicted below. Usually, the username is **user** by default while password is randomly generated as the console shows.
-![LoginPage](https://github.com/tsunghsiang/taco-cloud/tree/master/src/main/resources/static/images/loginpage.png)
-![PWD](https://github.com/tsunghsiang/taco-cloud/tree/master/src/main/resources/static/images/pwd.png)
+![LoginPage](https://github.com/tsunghsiang/taco-cloud/blob/master/src/main/resources/static/images/loginpage.png)
+![PWD](https://github.com/tsunghsiang/taco-cloud/blob/master/src/main/resources/static/images/pwd.png)
