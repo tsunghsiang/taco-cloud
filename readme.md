@@ -71,7 +71,7 @@ As code snippet above, the class `TacoCloudApplication` implements interface `We
 ## Part 3. Working with Data
 
 ### H2 Database
-In order to set up a simple database for unit testing or POC, we'd like it to be created when a server turns on as well as to be destroyed when a server turns off. [H2 Databse](https://howtodoinjava.com/spring-boot2/h2-database-example/) is an embedded, in-memory database that could be applied for functional validation in the original development life cycle.
+>> In order to set up a simple database for unit testing or POC, we'd like it to be created when a server turns on as well as to be destroyed when a server turns off. [H2 Databse](https://howtodoinjava.com/spring-boot2/h2-database-example/) is an embedded, in-memory database that could be applied for functional validation in the original development life cycle.
 
 To apply it in a SpringBoot application, we should add the maven dependency in a pom.xml file as below
 ```
@@ -84,7 +84,7 @@ To apply it in a SpringBoot application, we should add the maven dependency in a
 As pom.xml file described, the scope of the bean is used at runtime. That is to say, the database starts when an application runs; release itself when an application terminates. To learn more regarding it, please refer to [H2 Engine](https://www.h2database.com/html/main.html).
 
 ### Spring JDBC
-To interact with database, Spring provides a framework, Spring JDBC, for developers to simplify redundant data access operations. In this section, the auditor introduced the uses of both [JdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) and [SimpleJdbcInsert](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/simple/SimpleJdbcInsert.html) for inserting data into specific tables.
+>>To interact with database, Spring provides a framework, Spring JDBC, for developers to simplify redundant data access operations. In this section, the auditor introduced the uses of both [JdbcTemplate](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html) and [SimpleJdbcInsert](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/jdbc/core/simple/SimpleJdbcInsert.html) for inserting data into specific tables.
 
 To sum up, [Spring JDBC modules](https://www.baeldung.com/spring-jdbc-jdbctemplate) are to be separated into 4 packages:
 * Core: The core of JDBC container which contains basic components for data access, inclusive of JdbcTemplate and SimpleJdbcInsert.
@@ -95,7 +95,7 @@ To sum up, [Spring JDBC modules](https://www.baeldung.com/spring-jdbc-jdbctempla
 Learn more from [Spring Framework Documentation](https://docs.spring.io/spring-framework/docs/current/reference/html/index.html).
 
 ### Customization of JPA Repositories
-**When generating the repository implementations, Spring Data examines any methods in the repository interface, parses the method name, and attempts to understand the method's purpose in the context of the persisted object**.
+>> **When generating the repository implementations, Spring Data examines any methods in the repository interface, parses the method name, and attempts to understand the method's purpose in the context of the persisted object**.
 
 Essentially, Spring Data defines a miniature of DSL ([Domain Specific Language](https://en.wikipedia.org/wiki/Domain-specific_language)) where persistence details are expressed in repository method signatures. In short, a repository method consists of a verb, an optional subject, the word '**By**', and a predicate, as described below.
 ```
