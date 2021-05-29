@@ -20,6 +20,6 @@ INSERT INTO Ingredient(id, name, type) VALUES ('SRCR', 'Sour Cream', 4);
 /* Insert Users */
 INSERT INTO Users(username, password, enabled) VALUES ('admin', 'sysadmin', true);
 INSERT INTO Users(username, password, enabled) VALUES ('user', 'test', true);
-/* Insert Users' Authoritues */
+/* Insert UserAuthorities */
 INSERT INTO UserAuthorities(username, authority) VALUES ('admin', 'admin');
 INSERT INTO UserAuthorities(username, authority) VALUES ('user', 'customer');
