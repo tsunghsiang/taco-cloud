@@ -37,3 +37,14 @@ CREATE TABLE IF NOT EXISTS Taco_Order_Tacos (
 	FOREIGN KEY (taco) REFERENCES Taco(id) 
 );
 
+CREATE TABLE IF NOT EXISTS Users (
+	username VARCHAR(255) NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	enabled BOOLEAN NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS UserAuthorities (
+	username VARCHAR(255) NOT NULL,
+	authority VARCHAR(255) NOT NULL,
+	FOREIGN KEY (username) REFERENCES Users(username)
+);
