@@ -112,7 +112,7 @@ There are 3 points needs being emphasized with JPA customization:
 ## Part 4. Securing Spring
 
 To provide basic secure configuration for SpringBoot applications, the only thing a developer needs to do is to include the maven dependency as below in the pom.xml file.
-```
+```xml
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
@@ -122,3 +122,167 @@ When the application starts, auto-configuration will detect that Spring Security
 
 ![LoginPage](https://github.com/tsunghsiang/taco-cloud/blob/master/src/main/resources/static/images/loginpage.png)
 ![PWD](https://github.com/tsunghsiang/taco-cloud/blob/master/src/main/resources/static/images/pwd.png)
+
+Spring Security provides several options for configuring a user store. No matter which option below you choose, you can configure it by overriding ```configure(AuthenticationManagerBuilder auth)``` method in class [```WebSecurityConfigurerAdapter```](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/web/configuration/WebSecurityConfigurerAdapter.html#configure(org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder)).
+**[1] An in-memory user store**: usually applied for testing purposes or for very simple applications. However, if you'd like to develope functionalities of user registration, account removal, change password, etc, the in-memory user store is not enough.
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	protected void configure​(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication()
+			.withUser("user")
+			.password("{noop}inifnity")
+			.authorities("ROLE_USER");
+	}
+}
+```
+Note: If you'd like to know the reason why there is a wording ```{noop}``` concatenated with password ```infinity```, please refer to the [link](https://mkyong.com/spring-boot/spring-security-there-is-no-passwordencoder-mapped-for-the-id-null/).
+
+**[2] A JDBC-based user store**: The JDBC-based user store is applied when there is a relational database storing users'information inclusive of their user names, passwords and authorities. 
+
+Unlike in-memory user store, developers need to refer to a certain datasource for accessing users' information. Same, we should prepare corresponding data in a database. In this example, tables ```User``` and ```UserAuthorities``` should be created and inserted with values as needed.
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	private DataSource ds;
+	private final String query_user_by_username = "SELECT username, '{noop}' || password, enabled FROM Users WHERE username = ?";
+	private final String query_auth_by_username = "SELECT username, authority FROM UserAuthorities WHERE username = ?";
+	
+	@Autowired
+	protected void configure​(AuthenticationManagerBuilder auth) throws Exception {
+		auth.jdbcAuthentication()
+			.dataSource(this.ds)
+			.usersByUsernameQuery(query_user_by_username)
+			.authoritiesByUsernameQuery(query_auth_by_username);
+	}
+	
+}
+```
+In ```schema.sql```, we specify tables ```Users``` and ```UserAuthorities``` with required columns.
+```sql
+CREATE TABLE IF NOT EXISTS Users (
+	username VARCHAR(255) NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	enabled BOOLEAN NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS UserAuthorities (
+	username VARCHAR(255) NOT NULL,
+	authority VARCHAR(255) NOT NULL,
+	FOREIGN KEY (username) REFERENCES Users(username)
+);
+```
+And edit ```import.sql```, the data would be loaded into database before a web application is fired up.
+```sql
+/* Insert Users */
+INSERT INTO Users(username, password, enabled) VALUES ('admin', 'sysadmin', true);
+INSERT INTO Users(username, password, enabled) VALUES ('user', 'test', true);
+/* Insert UserAuthorities */
+INSERT INTO UserAuthorities(username, authority) VALUES ('admin', 'admin');
+INSERT INTO UserAuthorities(username, authority) VALUES ('user', 'customer');
+```
+**[3] An [LDAP](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Protocol_overview)-backed user store**: To enable an embedded LDAP server, we have to add 4 maven dependencies to **pom.xml** file: ```spring-boot-starter-security```, ```spring-ldap-core```,  ```spring-security-ldap``` and ```unboundid-ldapsdk```. An embedded LDAP server would be loaded in when a web application is fired up
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+<dependency>
+	<groupId>org.springframework.ldap</groupId>
+	<artifactId>spring-ldap-core</artifactId>
+</dependency>
+		
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-ldap</artifactId>
+</dependency>
+		
+<dependency>
+	<groupId>com.unboundid</groupId>
+	<artifactId>unboundid-ldapsdk</artifactId>
+</dependency>
+```
+To configure settings of embedded LDAP server, we added associative parameters to ```application.properties``` file, as indicated below.
+```properties
+# LDAP configuration
+spring.ldap.embedded.ldif=users.ldif
+spring.ldap.embedded.base-dn=ou=groups,dc=tacocloud,dc=com
+spring.ldap.embedded.port=6666
+```
+As you see, field ```spring.ldap.embedded.ldif``` specifies a [LDIF](http://www.zytrax.com/books/ldap/ch3/#overview) file that pre-configures users login information. Usually we put the corresponding [LDIF](http://www.zytrax.com/books/ldap/ch3/#overview) file under path ```src/main/resources```; Spring would automatically scan the resources; load data into the LDAP server. Furthermore, I refer the embedded LDAP server port as 6666, or the port number 33389 is applied by default.
+
+Likewise, the class extends class ```WebSecurityConfigurerAdapter``` to override the ```configure``` method for implementing LDAP-based user store. Note that ```AuthenticationManagerBuilder``` provides a method, ```ldapAuthentication()```, to validate username and password.
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    protected void configure​(AuthenticationManagerBuilder auth) throws Exception {
+	    LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuth 
+	    = auth.ldapAuthentication();
+		ldapAuth.userSearchBase("ou=people")
+		 		.userSearchFilter("uid={0}")
+		 		.groupSearchBase("ou=groups")
+		 		.groupSearchFilter("member={0}")
+				.passwordCompare()
+				.passwordAttribute("userPassword");
+		ldapAuth.contextSource()
+				.root("dc=tacocloud,dc=com");
+	}
+}
+```
+There are two points we should notice when it comes to LDAP implementation.
+(1) Now our case is for embedded LDAP server, if users want to configure a remote LDAP server where data resides, remember to use the ```contextSource()``` method to configure the location.
+```java
+ldapAuth.contextSource()
+        .url("ldap://tacocloud.com:6666/dc=tacocloud,dc=com")
+        .root("dc=tacocloud,dc=com");
+```
+(2) As we have specified field ```spring.ldap.embedded.ldif``` in ```application.properties``` so that Spring engine would scan resource files to find its path. However, if you don't do that, remember to specify the path by ```ldif(String path)``` method. Otherwise errors would occur when an application fires up.
+```java
+ldapAuth.contextSource()
+        .ldif("classpath:users.ldif")
+        .root("dc=tacocloud,dc=com");
+```
+Lastly, we edit ```users.ldif``` to specify users information. Usually the file is put under the ```src/main/resources``` folder.
+```ldif
+dn: ou=groups,dc=tacocloud,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: groups
+
+dn: ou=people,dc=tacocloud,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+dn: uid=buzz,ou=people,dc=tacocloud,dc=com
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Buzz Lightyear
+sn: Lightyear
+uid: buzz
+userPassword: password
+
+dn: cn=tacocloud,ou=groups,dc=tacocloud,dc=com
+objectclass: top
+objectclass: groupOfNames
+cn: tacocloud
+member: uid=buzz,ou=people,dc=tacocloud,dc=com
+```
+
+**Note**: To know more about LDAP and LDIF, please refer to links below.
+* [LDAP Overview](http://www.zytrax.com/books/ldap/ch3/#overview)
+* [LDIF Attributes](http://www.kouti.com/tables/baseattributes.htm)
+
+**[4] A custom user details service**
