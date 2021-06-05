@@ -50,7 +50,7 @@
 
 ### View Controller
 Conventionally, we define a controller class to handle requests from views through model attributes. Therefore, there is usually a mapping between an URL and a view. Suppposed that it is unnecessary to cope with requests via model attributes and directly map to corresponding views, the [WebMvcConfigurer](https://docs.spring.io/spring-framework/docs/3.1.x/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurer.html) interface could be applied as below to simplify view mapping.
-```
+```java
 @SpringBootApplication
 public class TacoCloudApplication implements WebMvcConfigurer{
 
@@ -74,7 +74,7 @@ As code snippet above, the class `TacoCloudApplication` implements interface `We
 > In order to set up a simple database for unit testing or POC, we'd like it to be created when a server turns on as well as to be destroyed when a server turns off. [H2 Databse](https://howtodoinjava.com/spring-boot2/h2-database-example/) is an embedded, in-memory database that could be applied for functional validation in the original development life cycle.
 
 To apply it in a SpringBoot application, we should add the maven dependency in a pom.xml file as below
-```
+```xml
 <dependency>
     <groupId>com.h2database</groupId>
     <artifactId>h2</artifactId>
