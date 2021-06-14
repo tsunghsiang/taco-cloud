@@ -41,7 +41,7 @@ public class User implements UserDetails {
 	private String city;
 	private String state;
 	private String zip;
-	private String phone_number;
+	private String phone;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -78,8 +78,8 @@ public class User implements UserDetails {
 		return zip;
 	}
 	
-	public String getPhoneNumber() {
-		return phone_number;
+	public String getPhone() {
+		return phone;
 	}
 	
 	@Override
