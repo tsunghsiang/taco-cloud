@@ -37,14 +37,28 @@ CREATE TABLE IF NOT EXISTS Taco_Order_Tacos (
 	FOREIGN KEY (taco) REFERENCES Taco(id) 
 );
 
+-- [JDBC-based User Store]
 CREATE TABLE IF NOT EXISTS Users (
 	username VARCHAR(255) NOT NULL,
 	password VARCHAR(255) NOT NULL,
 	enabled BOOLEAN NOT NULL
 );
 
+-- [JDBC-based User Store]
 CREATE TABLE IF NOT EXISTS UserAuthorities (
 	username VARCHAR(255) NOT NULL,
 	authority VARCHAR(255) NOT NULL,
 	FOREIGN KEY (username) REFERENCES Users(username)
+);
+
+CREATE TABLE IF NOT EXISTS User (
+	id IDENTITY,
+	username VARCHAR(255) NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	fullname VARCHAR(255) NOT NULL,
+	street VARCHAR(255) NOT NULL,
+	city VARCHAR(255) NOT NULL,
+	state VARCHAR(255) NOT NULL,
+	zip VARCHAR(255) NOT NULL,
+	phone_number VARCHAR(255) NOT NULL
 );

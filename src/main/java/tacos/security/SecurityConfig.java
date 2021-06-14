@@ -21,18 +21,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * private final String query_user_by_username = "SELECT username, '{noop}' || password, enabled FROM Users WHERE username = ?";
 	 * private final String query_auth_by_username = "SELECT username, authority FROM UserAuthorities WHERE username = ?";
 	 * */
-	
+
 	@Autowired
-	private UserDetailsService uds;	
-	
-	@Bean
-	public PasswordEncoder encoder() {
-		return new StandardPasswordEncoder("53crt");
-	}
-	
+	private UserDetailsService uds;
+		
 	@Autowired
 	protected void configure​(AuthenticationManagerBuilder auth) throws Exception {
-		
 		/* In-Memory-based authentication
 		 * auth.inMemoryAuthentication()
 		 *     .withUser("user")
@@ -46,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		 *     .usersByUsernameQuery(query_user_by_username)
 		 *     .authoritiesByUsernameQuery(query_auth_by_username);
 		 * */
-
+		
 		/*
 		 * LDAP-based authentication
 		 * LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuth = auth.ldapAuthentication();
@@ -60,7 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		 *         .root("dc=tacocloud,dc=com");
 		 * */
 		
-		auth.userDetailsService(uds)
-			.passwordEncoder(encoder());
+		auth.userDetailsService(uds);
 	}
 }
