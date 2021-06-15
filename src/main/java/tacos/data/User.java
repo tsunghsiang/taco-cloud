@@ -25,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 @Table(name="User")
 public class User implements UserDetails {
 
-
 	/**
 	 * Default Serial Version ID
 	 */
@@ -43,6 +42,26 @@ public class User implements UserDetails {
 	private String zip;
 	private String phone;
 
+	public User() {}
+	
+	public User(String username, 
+				String password, 
+				String fullname, 
+				String street, 
+				String city, 
+				String state, 
+				String zip, 
+				String phone) {
+		this.username = username;
+		this.password = password;
+		this.fullname = fullname;
+		this.street = street;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.phone = phone;
+	}
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 
+import tacos.data.RegistrationForm;
 import tacos.data.User;
 import tacos.repository.jpa.UserJpaRespository;
 
@@ -20,9 +21,9 @@ public class RegistrationController {
 
 	private UserJpaRespository repo;
 	
-	@ModelAttribute(name="userinfo")
-	public User userinfo() {
-		return new User();
+	@ModelAttribute(name="formdata")
+	public RegistrationForm formdata() {
+		return new RegistrationForm();
 	}
 	
 	@Autowired
@@ -41,8 +42,10 @@ public class RegistrationController {
 	 * @param name should be equivalent to th:object in Thymeleaf form
 	 */
 	@PostMapping
-	public String processRegisteration(User userinfo) {
-		return "redirect:/";
+	public String processRegisteration(RegistrationForm formdata) {
+		// System.out.print(formdata.toString());
+		repo.save(formdata.toUser());
+		return "redirect:/login";
 	}
 	
 }

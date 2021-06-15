@@ -24,4 +24,4 @@ INSERT INTO Users(username, password, enabled) VALUES ('user', 'test', true);
 INSERT INTO UserAuthorities(username, authority) VALUES ('admin', 'admin');
 INSERT INTO UserAuthorities(username, authority) VALUES ('user', 'customer');
 /* Insert User [Custom Details User Store] */
-INSERT INTO User(id, username, password, fullname, street, city, state, zip, phone) VALUES (1, 'admin', '{noop}admin', 'Andy Wu', 'test', 'test', 'test', 'test', '0968147265');
+--INSERT INTO User(id, username, password, fullname, street, city, state, zip, phone) VALUES (1, 'admin', '{noop}admin', 'Andy Wu', 'test', 'test', 'test', 'test', '0912345678');
