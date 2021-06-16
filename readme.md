@@ -286,3 +286,79 @@ member: uid=buzz,ou=people,dc=tacocloud,dc=com
 * [LDIF Attributes](http://www.kouti.com/tables/baseattributes.htm)
 
 **[4] A custom user details service**
+In general, we would like to collect other user information no matter for user registrations or logins. In this scenario, other user details should be involved anyway. In Spring security we are going to implement [```UserDetailsService```](https://docs.spring.io/spring-security/site/docs/3.2.x/apidocs/org/springframework/security/core/userdetails/UserDetailsService.html) interface to manipulate user details data. As you can see, method ```loadUserByUsername(String username)``` is overriden to query user-details from database. By the way, the annotation ```@Service``` indicates the class to injected as a bean since Spring application context would scan through the project, referring it as a component.
+```java
+@Service
+public class UserRepositoryUserDetailsService implements UserDetailsService {
+
+	private UserJpaRespository repo;
+	
+	@Autowired
+	public UserRepositoryUserDetailsService(UserJpaRespository repo) {
+		this.repo = repo;
+	}
+	
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User detail = repo.findByUsername(username);
+		
+		if(detail != null) {
+			return detail;
+		}else {
+			throw new UsernameNotFoundException("Username: " + username + " not found");
+		}
+	}
+
+}
+```
+If you take a deeper look at the snippet, method ```loadUserByUsername``` returns an object of type [```UserDetails```](https://docs.spring.io/spring-security/site/docs/3.2.x/apidocs/org/springframework/security/core/userdetails/UserDetails.html). That is to say, any data returned by the method should follow the interface to define its own user details. Therefore, we define a domain class inherited from interface ```UserDetails``` to expand the user details as below:
+```java
+@Data
+@Entity
+@RequiredArgsConstructor
+@NoArgsConstructor(access=AccessLevel.PRIVATE, force=true)
+@Table(name="User")
+public class User implements UserDetails {
+
+	/**
+	 * Default Serial Version ID
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id;
+	private String username;
+	private String password;
+	private String fullname;
+	private String street;
+	private String city;
+	private String state;
+	private String zip;
+	private String phone;
+
+    /* Skip some overriden methods here ... */
+}
+```
+The annotation ```Entity``` is added to indicate the domain object is persisted to the database while the annotation ```Table``` declares the domain object corresponds to database table name ```User```. Likewise, Spring Data JPA applies interface [```CrudRepository<T,ID>```](https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html) to provide basic CRUD operations for extensions of JPA repositories, which simplifies the work of CRUD implemetation in JDBC-based repositories. In our case, Spring security would query username from database to compare whether the associated password is identical to what is typed in.
+```java
+@Repository
+public interface UserJpaRespository extends CrudRepository<User, Long>{
+	public User findByUsername(String username);
+}
+```
+To apply the service mentioned, the class ```AuthenticationManagerBuilder``` provides a method ```public<T extends UserDetailsService> userDetailsService(T service)``` to register custom class of type ```UserDetailsService```. Remember to provide associative ```User``` details in database first to test the login functionality.
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UserDetailsService uds;
+
+    @Autowired
+    protected void configure​(AuthenticationManagerBuilder auth) throws Exception {
+	    auth.userDetailsService(uds);
+	}
+}
+```
