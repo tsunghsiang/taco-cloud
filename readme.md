@@ -285,8 +285,7 @@ member: uid=buzz,ou=people,dc=tacocloud,dc=com
 * [LDAP Overview](http://www.zytrax.com/books/ldap/ch3/#overview)
 * [LDIF Attributes](http://www.kouti.com/tables/baseattributes.htm)
 
-**[4] A custom user details service**
-In general, we would like to collect other user information no matter for user registrations or logins. In this scenario, other user details should be involved anyway. In Spring security we are going to implement [```UserDetailsService```](https://docs.spring.io/spring-security/site/docs/3.2.x/apidocs/org/springframework/security/core/userdetails/UserDetailsService.html) interface to manipulate user details data. As you can see, method ```loadUserByUsername(String username)``` is overriden to query user-details from database. By the way, the annotation ```@Service``` indicates the class to injected as a bean since Spring application context would scan through the project, referring it as a component.
+**[4] A custom user details service**: In general, we would like to collect other user information no matter for user registrations or logins. In this scenario, other user details should be involved anyway. In Spring security we are going to implement [```UserDetailsService```](https://docs.spring.io/spring-security/site/docs/3.2.x/apidocs/org/springframework/security/core/userdetails/UserDetailsService.html) interface to manipulate user details data. As you can see, method ```loadUserByUsername(String username)``` is overriden to query user-details from database. By the way, the annotation ```@Service``` indicates the class to injected as a bean since Spring application context would scan through the project, referring it as a component.
 ```java
 @Service
 public class UserRepositoryUserDetailsService implements UserDetailsService {
