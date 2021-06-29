@@ -110,10 +110,10 @@ public class DesignTacoController {
 	@PostMapping
 	public String processDesign(@Valid Taco taco, Errors errors, @ModelAttribute Order order) {
 	    if (errors.hasErrors()) {
-	      return "design";
+	    	return "design";
 	    }
 		System.out.println(taco);
-		
+
 		// Save taco information to database
 		// Save taco to order model attributes for accessing tacoId
 		if(taco.getIngredients() != null) {

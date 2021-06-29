@@ -3,9 +3,11 @@ package tacos.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 
 @Configuration
 @EnableWebSecurity
@@ -52,4 +54,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		auth.userDetailsService(uds);
 	}
+	
+	/**
+	 * The method is overridden to implement web-level requests
+	 * 
+	 * To prevent CRSF/CQRS issues from disabling jumping among web pages
+	 * when login.
+	 * Please refer to link: https://stackoverflow.com/questions/19468209/spring-security-403-error
+	 */
+	protected void configure(HttpSecurity http) throws Exception {
+	    http.csrf()
+	    	.disable()
+	    	.authorizeRequests()
+	    	.anyRequest()
+	    	.authenticated()
+	    	.and()
+	    	.formLogin()
+	    	.permitAll();
+	}
+	
 }
