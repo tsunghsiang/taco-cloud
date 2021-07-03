@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Insert title here</title>
+		<title>Login</title>
 	</head>
 
 	<body>
-		<h1>Login</h1>
+		<h1>Login Taco Cloud</h1>
  		<img th:src="@{/images/TacoCloud.png}"/>
  		
  		<p>New here? Click <a th:href="@{/register}">here</a> to register.</p>
@@ -16,7 +16,7 @@
  			<label for="username">Username: </label>
  			<input type="text" name="username" id="username" /><br/>
  			<label for="password">Password: </label>
- 			<input type="password" name="password" id="password" /><br/>
+ 			<input type="text" name="password" id="password" /><br/>
  			<input type="submit" value="Login"/>
  		</form>
 	</body>

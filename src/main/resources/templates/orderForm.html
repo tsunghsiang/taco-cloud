@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title>Taco Cloud</title>
-	<link th:href="@{/style.css}" rel="stylesheet"/>
+	<link th:href="@{css/style.css}" rel="stylesheet"/>
 </head>
 	<body>
 		<form method="post" th:action="@{/orders}" th:object="${order}">
@@ -24,6 +24,7 @@
 				  th:if="${#fields.hasErrors('name')}"
 				  th:errors="*{name}">City Error</span>
 			<br/>
+			<br>
 			
 			<label for="street">Street address: </label>
 			<input type="text" th:field="*{street}" />
@@ -31,6 +32,7 @@
 				  th:if="${#fields.hasErrors('street')}"
 				  th:errors="*{street}">Street Error</span>
 			<br/>
+			<br>
 			
 			<label for="city">City: </label>
 			<input type="text" th:field="*{city}" />
@@ -38,6 +40,7 @@
 				  th:if="${#fields.hasErrors('city')}"
 				  th:errors="*{city}">City Error</span>
 			<br/>
+			<br>
 			
 			<label for="state">State: </label>
 			<input type="text" th:field="*{state}" />
@@ -45,6 +48,7 @@
 				  th:if="${#fields.hasErrors('state')}"
 				  th:errors="*{state}">State Error</span>
 			<br/>
+			<br>
 			
 			<label for="zip"> Zip Code: </label>
 			<input type="text" th:field="*{zip}" />
@@ -52,6 +56,7 @@
 				  th:if="${#fields.hasErrors('zip')}"
 				  th:errors="*{zip}">Zip Error</span>
 			<br/>
+			<br>
 			
 			<h3>Here's how I'll pay ...</h3>
 			<label for="ccNumber">Credit Card #: </label>
@@ -60,6 +65,7 @@
 				  th:if="${#fields.hasErrors('ccNumber')}"
 				  th:errors="*{ccNumber}">CC Num Error</span>
 			<br/>
+			<br>
 			
 			<label for="ccExpiration">Expiration: </label>
 			<input type="text" th:field="*{ccExpiration}" />
@@ -67,6 +73,7 @@
 				  th:if="${#fields.hasErrors('ccExpiration')}"
 				  th:errors="*{ccExpiration}">CC Expiration Error</span>
 			<br/>
+			<br>
 			
 			<label for="ccCVV">CVV: </label>
 			<input type="text" th:field="*{ccCVV}" />
@@ -74,8 +81,12 @@
 				  th:if="${#fields.hasErrors('ccCVV')}"
 				  th:errors="*{ccCVV}">CC CVV Error</span>
 			<br/>
-			
+			<br>
 			<input type="submit" value="Submit Order" />
 		</form>
+		<br>
+		<form method="POST" th:action="@{/logout}" id="logoutForm">
+    		<input type="submit" value="Logout"/>
+		</form>			
 	</body>
 </html>

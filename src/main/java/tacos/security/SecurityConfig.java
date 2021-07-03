@@ -62,17 +62,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * Please refer to link: https://stackoverflow.com/questions/19468209/spring-security-403-error
 	 */
 	protected void configure(HttpSecurity http) throws Exception {
-	    http.csrf()
-	    	.disable()
-	    	.authorizeRequests()
+	    http.authorizeRequests()
 	    	.antMatchers("/design", "/orders")
-            .access("hasRole('ROLE_USER')")
+	    	.access("hasRole('ROLE_USER')")
 	    	.antMatchers("/", "/**")
 	    	.access("permitAll")
 	    	.and()
 	    	// Jump to self-defined login page for authorization
 	    	.formLogin()
-	    	.loginPage("/login");
+	    	.loginPage("/login")
+	    	.permitAll()
+	    	// Enable logout function
+	    	.and()
+	    	.logout()
+	    	.logoutSuccessUrl("/login?logout")
+	    	.permitAll()
+	    	// Disable CSRF check
+	    	.and()
+	    	.csrf()
+	    	.disable();
 	}
 	
 }

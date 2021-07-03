@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title>Taco Cloud</title>
-	<link th:href="@{/style.css}" rel="stylesheet"/>
+	<link th:href="@{css/style.css}" rel="stylesheet"/>
 </head>
 	<body>
 		<h1>Design Your Taco!</h1>
@@ -64,8 +64,13 @@
 			 
 			<input type="text" th:field="*{name}"/>
 			<br/>
+			<br>
 			<button>Submit Your Taco</button>
 			</div>
 		</form>
+		<br>
+		<form method="POST" th:action="@{/logout}" id="logoutForm">
+    		<input type="submit" value="Logout"/>
+		</form>			
 	</body>
 </html>

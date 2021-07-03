@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
@@ -44,15 +45,18 @@ public class Order {
 	private String state;
 	@NotBlank(message="Zip code is required")
 	private String zip;
-	@CreditCardNumber(message="Not a valid credit card number")
+	@CreditCardNumber(message="Not a valid credit card number. Format: XXXXXXXXXXXXXXXX")
 	private String ccNumber;
 	@Pattern(regexp="^(0[1-9]|1[0-2])([\\/])([1-9][0-9])$",
 			 message="Must be formatted MM/YY")
 	private String ccExpiration;
 	@Digits(integer=3, fraction=0, message="Invalid CVV")
 	private String ccCVV;
+	@ManyToOne
+	private User user;
 	@ManyToMany(targetEntity=Taco.class)
 	private List<Taco> tacos = new ArrayList<Taco>();
+
 	
 	public Long getId() { return id; }
 	public Date getPlacedAt() { return placedAt; }
@@ -64,6 +68,7 @@ public class Order {
 	public String getCcNumber() {return ccNumber;}
 	public String getCcExpiration() { return ccExpiration; }
 	public String getCcCVV() { return ccCVV; }
+	public User getUser() { return user; }
 	public List<Taco> getTacos() { return tacos; }
 	
 	public void setId(Long id) { this.id = id; }
@@ -76,6 +81,7 @@ public class Order {
 	public void setCcNumber(String ccNumber) { this.ccNumber = ccNumber;}
 	public void setCcExpiration(String ccExpiration) { this.ccExpiration = ccExpiration; }
 	public void setCcCVV(String ccCVV) { this.ccCVV = ccCVV; }	
+	public void setUser(User user) { this.user = user; }
 	public void setTacos(Taco taco) { this.tacos.add(taco); }
 	
 	public String toString() {
@@ -86,7 +92,8 @@ public class Order {
 										+ "[Order] ZIP Code: %s\n"
 										+ "[Order] Credit Card #: %s\n"
 										+ "[Order] Expiration: %s\n"
-										+ "[Order] CVV: %s\n", name, street, city, state, zip, ccNumber, ccExpiration, ccCVV);
+										+ "[Order] CVV: %s\n"
+										+ "[Order] User: %s", name, street, city, state, zip, ccNumber, ccExpiration, ccCVV, user.getUsername());
 		return result;
 	}
 	
