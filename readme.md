@@ -361,3 +361,107 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 }
 ```
+
+### Securing Web Requests
+In part of **`A custom user details service`**, we have introduced custom user authentication management.Developers could self-define a class if type `UserDetailsService` to control user logins.On the other hand, how to prevent some malicious requests from attacking your webs is also an important issue. By extending interface `WebSecurityConfigurerAdapter` with annotation [@EnableWebSecurity](https://docs.spring.io/spring-security/site/docs/4.0.x/apidocs/org/springframework/security/config/annotation/web/configuration/EnableWebSecurity.html) and [@Configuration](https://docs.spring.io/spring-framework/docs/3.2.x/javadoc-api/org/springframework/context/annotation/Configuration.html?is-external=true), we are able to set up criteria to avoid illegal web requests.
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	@Override
+	protected void configure​(AuthenticationManagerBuilder auth) throws Exception { 
+	    ...
+	}
+    @Override
+    protected void configure(HttpSecurity http) throws Exception { 
+        ...
+    }
+}
+```
+This `configure()` method accepts an [HttpSecurity](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/web/builders/HttpSecurity.html) object, which can be used to configure how security is handled at the web level.
+* Requring certain security conditions be met before allowing a request to be served.
+* Configuring a custom login page
+* Enabling users to logout of the application
+* Configuring cross-site request forgery protection
+
+Intercepting requests to ensure that the user has proper authority is one of the most common things you’ll configure [HttpSecurity](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/web/builders/HttpSecurity.html) to do. For example, we could ensure requests for `/design` and `/orders` are only available for authenticated users as below:
+```java
+protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests()
+        .antMatchers("/design", "/orders")
+        .hasRole("ROLE_USER")
+        .antMatchers("/", "/**")
+        .permitAll();
+}
+```
+First, requests to access `/design` and `/orders` are only available for users with type `ROLE_USER`. Secondly, requests for `/` and `/**` are permissible for all users. Remember that security rules declared first take precedence over those declared lower down. If you were to swap the order of those two security rules, all requests would have permitAll() applied to them; the rule for `/design` and `/orders` requests would have no effect.
+### Creating a custom login page
+Spring provides a default login page for users to login. However, login authentication might be different due to businese requirements. [HttpSecurity](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/web/builders/HttpSecurity.html) provides an API `formLogin()` that returns an instance, [FormLoginConfigurer](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/web/configurers/FormLoginConfigurer.html), to assist developers set up csutom login page as below:
+```java
+protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests()
+    	.antMatchers("/design", "/orders")
+    	.access("hasRole('ROLE_USER')")
+    	.antMatchers("/", "/**")
+    	.access("permitAll")
+    	.and()
+    	// Jump to self-defined login page for authorization
+    	.formLogin()
+    	.loginPage("/login")
+    	.permitAll();
+}
+```
+If we only configure login like this. Spring would provide a default login page instead of a custom login page. 
+
+Therefore, we could do either
+[1] Add a controller with a corresponding view to handle login requests. Or
+[2] Declare a custom class implementing [WebMvcConfigurer](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/config/annotation/WebMvcConfigurer.html) in order to add simple controller-view mapping relations with custom views.
+```java
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/").setViewName("home");
+		registry.addViewController("/login").setViewName("login");
+	}
+}
+```
+
+In my project, I applied the 2nd approach by adding `/login` controller, directing URL to custom `login.html`.
+```html
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Login</title>
+	</head>
+
+	<body>
+		<h1>Login Taco Cloud</h1>
+ 		<img th:src="@{/images/TacoCloud.png}"/>
+ 		
+ 		<p>New here? Click <a th:href="@{/register}">here</a> to register.</p>
+ 		
+ 		<!-- tag::thAction[] -->
+ 		<form method="POST" th:action="@{/login}">
+ 		<!-- end::thAction[] -->
+ 			<label for="username">Username: </label>
+ 			<input type="text" name="username" id="username" /><br/>
+ 			<label for="password">Password: </label>
+ 			<input type="text" name="password" id="password" /><br/>
+ 			<input type="submit" value="Login"/>
+ 		</form>
+	</body>
+</html>
+```
+The call to `loginPage()` after that designates the path where your custom login page will be provided. When Spring Security determines that the user is unauthenticated and needs to log in, it will redirect them to this path.
+As a result, when users login `/login`, they are directed to this page and are required to input username/password.
+
+### Logging out
+To enable logout function, we only need to invoke `logout()` on `HttpSecurity`object.
+```java
+    // Enable logout function
+	.and()
+	.logout()
+	.logoutSuccessUrl("/")
+	.permitAll()
+```
+In the snippet, the logout capability is enabled and when logout sccess users are directed to home page. 
